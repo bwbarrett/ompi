@@ -19,7 +19,7 @@ dnl                         and Technology (RIST).  All rights reserved.
 dnl Copyright (c) 2016-2021 IBM Corporation.  All rights reserved.
 dnl Copyright (c) 2020      Triad National Security, LLC. All rights
 dnl                         reserved.
-dnl Copyright (c) 2020      Amazon.com, Inc. or its affiliates.  All Rights
+dnl Copyright (c) 2020-2021 Amazon.com, Inc. or its affiliates.  All Rights
 dnl                         reserved.
 dnl Copyright (c) 2021      Nanook Consulting.  All rights reserved.
 dnl $COPYRIGHT$
@@ -36,10 +36,6 @@ dnl configure, abort.
 dnl
 dnl This macro will change the environment in the following way:
 dnl
-dnl   * opal_pmix_header [legacy] - will be set if building
-dnl         internally, to the header file that should be included for
-dnl         embedded builds.  This is used by PRRTE, but should not
-dnl         be used by new code.
 dnl   * opal_pmix_mode - either external or internal.  If internal,
 dnl         --with-pmix should be ignored by other packages
 dnl   * opal_pmix_CPPFLAGS - the C Preprocessor flags necessary to
@@ -63,8 +59,6 @@ AC_DEFUN([OPAL_CONFIG_PMIX], [
     opal_show_subtitle "Configuring PMIx"
 
     OPAL_3RDPARTY_WITH([pmix], [pmix], [package_pmix])
-
-    opal_pmix_header=""
 
     internal_pmix_happy=0
     m4_ifdef([package_pmix],
@@ -103,7 +97,9 @@ AC_DEFUN([OPAL_CONFIG_PMIX], [
          PAC_CONFIG_SUBDIR_ARGS([3rd-party/openpmix], [$internal_pmix_args],
                            [[--with-libevent=internal], [--with-hwloc=internal],
                             [--with-libevent=external], [--with-hwloc=external],
-                            [--with-pmix=[[^ 	]]*], [--with-platform=[[^ 	]]*]],
+                            [--with-pmix=[[^ 	]]*],
+                            [--with-prrte=[[^ 	]]*],
+                            [--with-platform=[[^ 	]]*]],
                            [internal_pmix_happy=1])
          OPAL_SUBDIR_ENV_RESTORE([opal_pmix_configure])
          OPAL_3RDPARTY_DIST_SUBDIRS="$OPAL_3RDPARTY_DIST_SUBDIRS openpmix"])
@@ -212,8 +208,6 @@ AC_DEFUN([_OPAL_CONFIG_PMIX_INTERNAL_POST], [
     opal_pmix_LIBS="$OMPI_TOP_BUILDDIR/3rd-party/openpmix/src/libpmix.la"
 
     CPPFLAGS="$CPPFLAGS $opal_pmix_CPPFLAGS"
-
-    opal_pmix_header="$OMPI_TOP_SRCDIR/opal/mca/pmix/pmix-3rdparty.h"
 
     OPAL_3RDPARTY_SUBDIRS="$OPAL_3RDPARTY_SUBDIRS openpmix"
 ])

@@ -3,7 +3,7 @@ dnl
 dnl Copyright (c) 2009-2017 Cisco Systems, Inc.  All rights reserved
 dnl Copyright (c) 2014-2018 Research Organization for Information Science
 dnl                         and Technology (RIST). All rights reserved.
-dnl Copyright (c) 2020      Amazon.com, Inc. or its affiliates.  All Rights
+dnl Copyright (c) 2020-2021 Amazon.com, Inc. or its affiliates.  All Rights
 dnl                         reserved.
 dnl Copyright (c) 2020      Intel, Inc.  All rights reserved.
 dnl $COPYRIGHT$
@@ -20,10 +20,6 @@ dnl configure, abort.
 dnl
 dnl This macro will change the environment in the following way:
 dnl
-dnl   * opal_hwloc_header [legacy] - will be set if building
-dnl         internally, to the header file that should be included for
-dnl         embedded builds.  This is used by PRRTE, but should not
-dnl         be used by new code.
 dnl   * opal_hwloc_mode - either external or internal.  If internal,
 dnl         --with-hwloc should be ignored by other packages
 dnl   * opal_hwloc_CPPFLAGS - the C Preprocessor flags necessary to
@@ -47,8 +43,6 @@ AC_DEFUN([OPAL_CONFIG_HWLOC], [
     opal_show_subtitle "Configuring hwloc"
 
     OPAL_3RDPARTY_WITH([hwloc], [hwloc], [package_hwloc])
-
-    opal_hwloc_header=""
 
     # unless internal specifically requested by the user, try to find
     # an external that works.
@@ -171,8 +165,6 @@ AC_DEFUN([_OPAL_CONFIG_HWLOC_INTERNAL], [
          # our tree and in the mean time are referenced by their .la
          # files.
          opal_hwloc_LIBS="$OMPI_TOP_BUILDDIR/$internal_hwloc_location/hwloc/libhwloc.la"
-
-         opal_hwloc_header="$OMPI_TOP_BUILDDIR/$internal_hwloc_location/include/hwloc.h"
 
          # no need to add to DIST_SUBDIRS, because we only ship the
          # tarball.  This is relative to the 3rd-party/ directory.

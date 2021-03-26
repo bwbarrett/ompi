@@ -16,7 +16,7 @@ dnl Copyright (c) 2006-2007 Los Alamos National Security, LLC.  All rights
 dnl                         reserved.
 dnl Copyright (c) 2009      Oak Ridge National Labs.  All rights reserved.
 dnl Copyright (c) 2019-2020 Intel, Inc.  All rights reserved.
-dnl Copyright (c) 2020      Amazon.com, Inc. or its affiliates.
+dnl Copyright (c) 2020-2021 Amazon.com, Inc. or its affiliates.
 dnl                         All Rights reserved.
 dnl Copyright (c) 2021      Nanook Consulting.  All rights reserved.
 dnl Copyright (c) 2021      IBM Corporation.  All rights reserved.
@@ -68,9 +68,6 @@ AC_DEFUN([OMPI_SETUP_PRRTE],[
             [""], [opal_prrte_mode="unspecified"],
             ["no"], [opal_prrte_mode="disabled"],
             [opal_prrte_mode="external"])
-
-    echo "with_prrte: $with_prrte"
-    echo "opal_prrte_mode: $opal_prrte_mode"
 
     m4_ifdef([package_prrte], [],
              [AS_IF([test "$opal_prrte_mode" = "internal"],
@@ -177,36 +174,19 @@ AC_DEFUN([_OMPI_SETUP_PRRTE_INTERNAL], [
               [internal_prrte_args="$internal_prrte_args --enable-prte-prefix-by-default"])
 
     AS_IF([test "$opal_libevent_mode" = "internal"],
-          [internal_prrte_args="$internal_prrte_args --with-libevent-header=$opal_libevent_header"
+          [internal_prrte_args="$internal_prrte_args --with-libevent=cobuild"
            internal_prrte_CPPFLAGS="$internal_prrte_CPPFLAGS $opal_libevent_CPPFLAGS"
            internal_prrte_libs="$internal_prrte_libs $opal_libevent_LIBS"])
 
     AS_IF([test "$opal_hwloc_mode" = "internal"],
-          [internal_prrte_args="$internal_prrte_args --with-hwloc-header=$opal_hwloc_header"
+          [internal_prrte_args="$internal_prrte_args --with-hwloc=cobuild"
            internal_prrte_CPPFLAGS="$internal_prrte_CPPFLAGS $opal_hwloc_CPPFLAGS"
            internal_prrte_libs="$internal_prrte_libs $opal_hwloc_LIBS"])
 
     AS_IF([test "$opal_pmix_mode" = "internal"],
-          [internal_prrte_args="$internal_prrte_args --with-pmix-header=$opal_pmix_header"
+          [internal_prrte_args="$internal_prrte_args --with-pmix=cobuild"
            internal_prrte_CPPFLAGS="$internal_prrte_CPPFLAGS $opal_pmix_CPPFLAGS"
            internal_prrte_libs="$internal_prrte_libs $opal_pmix_LIBS"])
-
-    AC_MSG_CHECKING([if PMIx version is 4.0.0 or greater])
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <pmix_version.h>]],
-            [[
-#if PMIX_VERSION_MAJOR < 4L
-#error "pmix API version is less than 4.0.0"
-#endif
-             ]])],
-            [AC_MSG_RESULT([yes])],
-            [AC_MSG_RESULT([no])
-             AC_MSG_WARN([OMPI's internal runtime environment "PRRTE" does not support])
-             AC_MSG_WARN([PMIx versions less than v4.x as they lack adequate tool])
-             AC_MSG_WARN([support. You can, if desired, build OMPI against an earlier])
-             AC_MSG_WARN([version of PMIx for strictly direct-launch purposes - e.g., using])
-             AC_MSG_WARN([Slurm's srun to launch the job - by configuring with the])
-             AC_MSG_WARN([--without-prrte option.])
-             AC_MSG_ERROR([Cannot continue])])
 
     # add the extra libs
     internal_prrte_args="$internal_prrte_args --with-prte-extra-lib=\"$internal_prrte_libs\" --with-prte-extra-ltlib=\"$internal_prrte_libs\""

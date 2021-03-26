@@ -20,10 +20,6 @@ dnl configure, abort.
 dnl
 dnl This macro will change the environment in the following way:
 dnl
-dnl   * opal_libevent_header [legacy] - will be set if building
-dnl         internally, to the header file that should be included for
-dnl         embedded builds.  This is used by PRRTE, but should not
-dnl         be used by new code.
 dnl   * opal_libevent_mode - either external or internal.  If internal,
 dnl         --with-libevent should be ignored by other packages
 dnl   * opal_libevent_CPPFLAGS - the C Preprocessor flags necessary to
@@ -47,8 +43,6 @@ AC_DEFUN([OPAL_CONFIG_LIBEVENT], [
     opal_show_subtitle "Configuring Libevent"
 
     OPAL_3RDPARTY_WITH([libevent], [libevent], [package_libevent])
-
-    opal_libevent_header=""
 
     # unless internal specifically requested by the user, try to find
     # an external that works.
@@ -200,8 +194,6 @@ AC_DEFUN([_OPAL_CONFIG_LIBEVENT_INTERNAL], [
          # our tree and in the mean time are referenced by their .la
          # files.
          opal_libevent_LIBS="$OMPI_TOP_BUILDDIR/$internal_libevent_location/libevent_core.la $OMPI_TOP_BUILDDIR/$internal_libevent_location/libevent_pthreads.la"
-
-         opal_libevent_header="$OMPI_TOP_BUILDDIR/$internal_libevent_location/event.h"
 
          # no need to add to DIST_SUBDIRS, because we only ship the
          # tarball.  This is relative to the 3rd-party/ directory.
