@@ -35,16 +35,29 @@
 
 #if OMPI_BUILD_MPI_PROFILING
 #if OPAL_HAVE_WEAK_SYMBOLS
+#if OMPI_BUILD_MPI_COUNT == 1
+#pragma weak MPI_Send_c = PMPI_Send_c
+#else
 #pragma weak MPI_Send = PMPI_Send
 #endif
+#endif
+#if OMPI_BUILD_MPI_COUNT == 1
+#define MPI_Send_c PMPI_Send_c
+#else
 #define MPI_Send PMPI_Send
+#endif
 #endif
 
 static const char FUNC_NAME[] = "MPI_Send";
 
 
+#if OMPI_BUILD_MPI_COUNT == 1
+int MPI_Send_c(const void *buf, MPI_Count count, MPI_Datatype type, int dest,
+               int tag, MPI_Comm comm)
+#else
 int MPI_Send(const void *buf, int count, MPI_Datatype type, int dest,
              int tag, MPI_Comm comm)
+#endif
 {
     int rc = MPI_SUCCESS;
 

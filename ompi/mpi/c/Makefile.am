@@ -34,20 +34,20 @@
 # layer, if weak symbols can't be used to alias the MPI_ namespace
 # into the PMPI_ namespace.
 
-noinst_LTLIBRARIES = libmpi_c.la libmpi_c_profile.la
+noinst_LTLIBRARIES = libmpi_c.la libmpi_c_profile_int.la libmpi_c_profile_count.la
 if BUILD_MPI_BINDINGS_LAYER
-noinst_LTLIBRARIES += libmpi_c_noprofile.la
+noinst_LTLIBRARIES += libmpi_c_noprofile_int.la libmpi_c_noprofile_count.la
 endif
 
 headers = bindings.h
 
 # attr_fn.c contains attribute manipulation functions which do not
-# profiling implications, and so are always built.
+# have count or profiling implications, and so are always built.
 libmpi_c_la_SOURCES = \
         attr_fn.c
-libmpi_c_la_LIBADD = libmpi_c_profile.la
+libmpi_c_la_LIBADD = libmpi_c_profile_int.la libmpi_c_profile_count.la
 if BUILD_MPI_BINDINGS_LAYER
-libmpi_c_la_LIBADD += libmpi_c_noprofile.la
+libmpi_c_la_LIBADD += libmpi_c_noprofile_int.la libmpi_c_noprofile_count.la
 endif
 
 # Conditionally install the header files
@@ -364,7 +364,6 @@ interface_profile_sources = \
         scatterv.c \
         iscatterv.c \
         scatterv_init.c \
-        send.c \
         send_init.c \
         sendrecv.c \
         sendrecv_replace.c \
@@ -500,8 +499,20 @@ interface_profile_sources += \
         type_struct.c \
         type_ub.c
 
-libmpi_c_profile_la_SOURCES = $(interface_profile_sources)
-libmpi_c_profile_la_CPPFLAGS = -DOMPI_BUILD_MPI_PROFILING=1
+#
+# List of all C files that have profile and count versions
+#
+interface_profile_and_count_sources = \
+        send.c
 
-libmpi_c_noprofile_la_SOURCES = $(interface_profile_sources)
-libmpi_c_noprofile_la_CPPFLAGS = -DOMPI_BUILD_MPI_PROFILING=0
+libmpi_c_profile_int_la_SOURCES = $(interface_profile_sources) $(interface_profile_and_count_sources)
+libmpi_c_profile_int_la_CPPFLAGS = -DOMPI_BUILD_MPI_PROFILING=1 -DOMPI_BUILD_MPI_COUNT=0
+
+libmpi_c_noprofile_int_la_SOURCES = $(interface_profile_sources) $(interface_profile_and_count_sources)
+libmpi_c_noprofile_int_la_CPPFLAGS = -DOMPI_BUILD_MPI_PROFILING=0 -DOMPI_BUILD_MPI_COUNT=0
+
+libmpi_c_profile_count_la_SOURCES = $(interface_profile_and_count_sources)
+libmpi_c_profile_count_la_CPPFLAGS = -DOMPI_BUILD_MPI_PROFILING=1 -DOMPI_BUILD_MPI_COUNT=1
+
+libmpi_c_noprofile_count_la_SOURCES = $(interface_profile_and_count_sources)
+libmpi_c_noprofile_count_la_CPPFLAGS = -DOMPI_BUILD_MPI_PROFILING=0 -DOMPI_BUILD_MPI_COUNT=1
