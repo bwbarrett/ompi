@@ -1,0 +1,12 @@
+/* Jenkins File for Open MPI community Jenkins Build Server */
+
+pipeline {
+    agent any
+    stages {
+        stage('Example') {
+            steps {
+                sh('echo "Hello, World"')
+            }
+        }
+    }
+}
