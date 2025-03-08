@@ -52,6 +52,7 @@ mca_bml_base_component_2_0_0_t mca_bml_r2_component = {
     },
     .bml_init = mca_bml_r2_component_init,
 };
+MCA_BASE_COMPONENT_INIT(opal, timer, darwin)
 
 static int mca_bml_r2_component_register(void)
 {

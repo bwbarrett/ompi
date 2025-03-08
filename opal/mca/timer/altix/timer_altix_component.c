@@ -65,6 +65,7 @@ const opal_timer_base_component_2_0_0_t mca_timer_altix_component = {
         {/* The component is checkpoint ready */
          MCA_BASE_METADATA_PARAM_CHECKPOINT},
 };
+MCA_BASE_COMPONENT_INIT(opal, timer, altix)
 
 static int opal_timer_altix_open(void)
 {

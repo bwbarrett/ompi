@@ -73,6 +73,7 @@ const opal_memory_base_component_2_0_0_t mca_memory_malloc_solaris_component = {
     .memoryc_deregister = opal_memory_base_component_deregister_empty,
     .memoryc_set_alignment = opal_memory_base_component_set_alignment_empty,
 };
+MCA_BASE_COMPONENT_INIT(opal, memory, malloc_solaris)
 
 /*
  * This component exists to establish the memory hook support
