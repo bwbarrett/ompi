@@ -60,7 +60,7 @@ properties([
     pipelineTriggers([cron('H 8 * * *')]),
     parameters([
         string(name: 'S3_BUCKET',
-               defaultValue: 'open-mpi-nightly',
+               defaultValue: 'ompi-nightly-devel',
                description: 'S3 bucket to publish nightly tarballs to.'),
         string(name: 'S3_BASENAME',
                defaultValue: 'nightly/open-mpi/',
