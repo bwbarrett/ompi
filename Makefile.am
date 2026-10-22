@@ -72,6 +72,8 @@ install-exec-hook:
 
 ACLOCAL_AMFLAGS = -I config
 
+EXTRA_DIST = foobar
+
 # Use EXTRA_DIST and an explicit target (with a FORCE hack so that
 # it's always run) rather than a dist-hook because there's some magic
 # extra logic in Automake that will add AUTHORS to EXTRA_DIST if the
